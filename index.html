@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+
+
+<!-- HW to-do: Message to have 3 components (as an object)
+	1. the text
+	2. the username
+	3. timestamp it was sent
+
+	So have second text-box for username
+
+	Hint: put those 3 things in an object
+
+	lookup: req.params
+ -->
+
+
+</head>
+<body>
+	<input type="text" id="input">
+	<input type="text" id="userName">
+	<button id="send">Send</button>
+	<div id="output"></div>
+	<script>
+
+		function getMessages(){
+			$.get("http://localhost:8080/chat", function(res){
+				// res ---> '["chats cleared", "a", "b"]'
+				var msgs = JSON.parse(res);
+				// msgs = ["chats cleared", "a", "b"]
+				$('#output').empty();
+				for (msg of msgs) {
+					var newPara = $('<p></p>');
+					newPara.text("(" + "From: " + msg.username + " At: " + msg.time +  ": " + " " + msg.text);
+					$('#output').append(newPara);
+				}
+			});
+		};
+
+		function sendMessage(){
+			var msg = {
+				text: $('#input').val(),
+				username: $('#userName').val(),
+				time: Date()
+			}; 
+			//make an object
+			$('#input').val("");
+
+			 // empty string -> clear input //CHANGE TO EMPTY OBJECT
+			$.post("http://localhost:8080/chat", {
+				message: msg
+			}, function(res) { //modify here to make into object?
+				getMessages();
+			});
+		};
+
+		$('#send').click(sendMessage);
+
+		$('#input').keyup(function(event) {
+			if (event.keyCode === 13) {
+				// 13 is "enter" / "return"
+				sendMessage();
+			}
+		});
+
+		$(document).ready(function(){
+			getMessages();
+
+			setInterval(getMessages, 1000);
+		});
+
+	</script>
+</body>
+</html>
