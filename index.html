@@ -31,10 +31,9 @@
 	<script>
 
 		function getMessages(){
-			$.get("http://localhost:8080/chat", function(res){
-				// res ---> '["chats cleared", "a", "b"]'
+			$.get("/chat", function(res){
+				// res ---> now array of objects
 				var msgs = JSON.parse(res);
-				// msgs = ["chats cleared", "a", "b"]
 				$('#output').empty();
 				for (msg of msgs) {
 					var newPara = $('<p></p>');
@@ -45,21 +44,21 @@
 		};
 
 		function sendMessage(){
-			var msg = {
-				text: $('#input').val(),
-				username: $('#userName').val(),
-				time: Date()
-			}; 
+			var text = $('#input').val();
+			var userName = $('#userName').val();
 			//make an object
 			$('#input').val("");
-
 			 // empty string -> clear input //CHANGE TO EMPTY OBJECT
 			$.post("http://localhost:8080/chat", {
-				message: msg
-			}, function(res) { //modify here to make into object?
+				message: {
+					text: text,
+					username: userName,
+					time: Date()
+				}
+			}, function(res) {
 				getMessages();
 			});
-		};
+		}; //maybe duplicate?????????????
 
 		$('#send').click(sendMessage);
 

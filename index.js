@@ -31,9 +31,31 @@ app.get("/chat", function(req, res){
 	res.send(JSON.stringify(messages));
 });
 //post chat
+
+
+// function (){
+// 	// var user = messages[0];
+// 	var wantedUser = messages[i]
+// 	var userText = []
+// 	for (var i = 0; i < messages.length; i++){
+// 		var wantedUser = messages[i].username
+// 		if(wantedUser ===){
+// 		userText.push(messages[i].text);
+// 		}
+// 	}
+// 	return userText;
+// }
+
+
 app.get("/log/:username", function(req, res){
-	res.send(JSON.stringify(req.params.username));//something
-	//something
+	var wantedUser = req.params.username; 
+	var userText = []
+	for (var i = 0; i < messages.length; i++){
+		if(wantedUser === messages[i].username){
+		userText.push(messages[i].text);
+		}
+	}
+	res.send(JSON.stringify(userText));
 });
 
 app.post("/chat", function(req, res){
@@ -46,7 +68,7 @@ app.post("/chat", function(req, res){
 });
 
 app.use(function(req, res, next){
-	//console.log(err);
+	console.log(err);
 	res.status(404);
 	res.send("404 File Not Found");
 });
